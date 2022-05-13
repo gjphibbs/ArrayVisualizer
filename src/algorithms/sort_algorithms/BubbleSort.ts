@@ -1,17 +1,23 @@
+import {SortingVisualizer} from "../../SortingVisualizer/SortingVisualizer";
+import {sleep} from "../../utils/sleep";
+
 export class BubbleSort {
 
-    public static sort(sortTarget: any[], comparator: (objectA: any, objectB: any) => boolean): any[] {
+    public static async sort(sortTarget: any[], comparator: (objectA: any, objectB: any) => boolean, sv?: SortingVisualizer): Promise<any[]> {
         let swaps: number = 0;
         let length: number = sortTarget.length;
         do {
             swaps = 0;
             for (let i: number = 0; i < length - 1; i++) {
+                if (sv?.cancel === true) return [];
                 if (comparator(sortTarget[i], sortTarget[i + 1])) {
                     this.swap(i, i + 1, sortTarget);
                     swaps++;
+                    sv?.setState({array: sortTarget});
+                    if (sv) await sleep(sv.speed);
                 }
             }
-        } while (swaps != 0);
+        } while (swaps !== 0);
         return sortTarget;
     }
 

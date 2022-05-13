@@ -1,6 +1,6 @@
     export function randomizeArr(arr: number[]) {
         for (let i = 0; i < arr.length; i++) {
-            arr[i] = getRandomInt(1, 1000);
+            arr[i] = getRandomInt(5, 1000);
         }
     }
 
