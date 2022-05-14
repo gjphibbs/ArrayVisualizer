@@ -50,7 +50,7 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
         this.setState({array});
     }
 
-    async sortThis() {
+    async bs() {
         if (this.sorting) return;
         this.sorting = true;
         await BubbleSort.sort(this.state.array, compareNumbers, this);
@@ -89,7 +89,7 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
                     );
                 }
             })}
-            <button onClick = {() => this.sortThis()}>Sort</button>
+            <button onClick = {() => this.bs()}>Sort</button>
             <button onClick={() => this.generateNewArr()}>Generate New Array</button>
             <button onClick= {() => this.cancel()}>CANCEL</button>
         </div>
