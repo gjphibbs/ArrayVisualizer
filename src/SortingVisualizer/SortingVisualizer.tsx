@@ -13,18 +13,27 @@ export interface SVState {
 }
 
 export class SortingVisualizer extends React.Component<SVProps, SVState> {
-    cancel: boolean;
     sorting: boolean;
+    size: number;
     speed: number; //ms delay in animations
+    idx1: number | null
+    idx2: number | null
 
     constructor(props: Readonly<SVProps> | SVProps) {
         super(props);
-        this.cancel = false;
         this.sorting = false;
-        this.speed = 100;
+        this.size = 100;
+        this.speed = 1;
+        this.idx2 = null;
+        this.idx1 = null;
         this.state = {
             array: []
         };
+    }
+
+    setIDX(one: number | null, two: number | null) {
+        this.idx1 = one;
+        this.idx2 = two;
     }
 
     setSpeed(s: number) {
@@ -32,42 +41,57 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
     }
 
     componentDidMount() {
-        this.randomizeArr(100);
+        this.randomizeArr(this.size);
     }
 
     randomizeArr(len: number) {
         const array = new Array(len);
-        randomizeArr(array);
+        randomizeArr(array, 5, 1000);
         this.setState({array});
     }
 
     async sortThis() {
-        if (this.sorting === true) return;
-        this.cancel = false;
+        if (this.sorting) return;
         this.sorting = true;
         await BubbleSort.sort(this.state.array, compareNumbers, this);
     }
 
     generateNewArr() {
-        this.cancel = true;
         this.sorting = false;
-        this.randomizeArr(100);
+        this.setIDX(null, null);
+        this.randomizeArr(this.size);
+    }
+
+    cancel() {
+        this.sorting = false;
+        this.setIDX(null, null);
     }
 
     render() {
         const {array}: any = this.state;
         return <div className="array-container">
             {array.map((value: number, idx: any) => {
-                return (
-                <div
-                    className="array-bar"
-                    key={idx}
-                    style={{height: `${value}px`}}>
-                </div>
-                );
+                if (this.idx1 === idx || this.idx2 === idx) {
+                    return (
+                        <div
+                            className="array-bar"
+                            key={idx}
+                            style={{height: `${value}px`, backgroundColor: `red`}}>
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div
+                            className="array-bar"
+                            key={idx}
+                            style={{height: `${value}px`, backgroundColor: `blue`}}>
+                        </div>
+                    );
+                }
             })}
             <button onClick = {() => this.sortThis()}>Sort</button>
             <button onClick={() => this.generateNewArr()}>Generate New Array</button>
+            <button onClick= {() => this.cancel()}>CANCEL</button>
         </div>
     }
 }

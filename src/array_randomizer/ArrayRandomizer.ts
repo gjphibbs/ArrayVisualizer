@@ -1,6 +1,6 @@
-    export function randomizeArr(arr: number[]) {
+    export function randomizeArr(arr: number[], min: number, max: number) {
         for (let i = 0; i < arr.length; i++) {
-            arr[i] = getRandomInt(5, 1000);
+            arr[i] = getRandomInt(min, max);
         }
     }
 
