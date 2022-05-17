@@ -3,6 +3,7 @@ import './SortingVisualizer.css'
 import {randomizeArr} from "../array_randomizer/ArrayRandomizer";
 import {BubbleSort} from "../algorithms/sort_algorithms/BubbleSort";
 import {compareNumbers} from "../comparitors/NumberComparitor";
+import {VisArray} from "../visualisable_datastructures/VisArray";
 
 export interface SVProps {
     // fn: (arr: any[]) => any[];
@@ -23,7 +24,7 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
         super(props);
         this.sorting = false;
         this.size = 100;
-        this.speed = 1;
+        this.speed = 100;
         this.idx2 = null;
         this.idx1 = null;
         this.state = {
@@ -54,6 +55,13 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
         if (this.sorting) return;
         this.sorting = true;
         await BubbleSort.sort(this.state.array, compareNumbers, this);
+    }
+
+    async vbs() {
+        if (this.sorting) return;
+        this.sorting = true;
+        let varr: VisArray = new VisArray(this.state.array, this);
+        await BubbleSort.visSort(varr, compareNumbers);
     }
 
     generateNewArr() {
@@ -89,7 +97,7 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
                     );
                 }
             })}
-            <button onClick = {() => this.bs()}>Sort</button>
+            <button onClick = {() => this.vbs()}>Sort</button>
             <button onClick={() => this.generateNewArr()}>Generate New Array</button>
             <button onClick= {() => this.cancel()}>CANCEL</button>
         </div>
