@@ -1,3 +1,5 @@
+This project was intended to help me learn React. It is incomplete with respect to my endgoals for it, and as such there are some empty files and some pieces which are incomplete or intended as temporary patchwork.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
