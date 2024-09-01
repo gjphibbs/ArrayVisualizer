@@ -17,8 +17,10 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
     sorting: boolean;
     size: number;
     speed: number; //ms delay in animations
-    idx1: number | null
-    idx2: number | null
+    idx1: number | null;
+    idx2: number | null;
+    paused: boolean;
+    private resolveWaiting: (() => void) | null = null;
 
     constructor(props: Readonly<SVProps> | SVProps) {
         super(props);
@@ -27,6 +29,7 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
         this.speed = 100;
         this.idx2 = null;
         this.idx1 = null;
+        this.paused = false;
         this.state = {
             array: []
         };
@@ -72,7 +75,31 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
 
     cancel() {
         this.sorting = false;
+        this.paused = false;
         this.setIDX(null, null);
+    }
+
+    pause() {
+        if(!this.sorting) {
+            this.paused = false;
+            return;
+        }
+        
+        this.paused = !this.paused;
+        if (!this.paused && this.resolveWaiting) {
+            this.resolveWaiting();
+            this.resolveWaiting = null;
+        }
+    }
+
+    async waitForPaused(): Promise<void> {
+        if (!this.paused) {
+          return;
+        }
+    
+        return new Promise<void>((resolve) => {
+          this.resolveWaiting = resolve;
+        });
     }
 
     render() {
@@ -97,9 +124,15 @@ export class SortingVisualizer extends React.Component<SVProps, SVState> {
                     );
                 }
             })}
-            <button onClick = {() => this.vbs()}>Sort</button>
+            <button onClick = {() => this.vbs()}>Visualize</button>
             <button onClick={() => this.generateNewArr()}>Generate New Array</button>
             <button onClick= {() => this.cancel()}>CANCEL</button>
+            <button onClick= {() => this.pause()}>Pause/Resume</button>
         </div>
     }
 }
+
+//REPLACE SILENT RETURNS
+// class SortRunningError extends Error {
+
+// }

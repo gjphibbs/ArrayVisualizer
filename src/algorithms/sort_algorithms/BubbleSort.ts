@@ -33,7 +33,9 @@ export class BubbleSort {
             swaps = 0;
             for (let i: number = 0; i < length - 1; i++) {
                 try {
-                    if (comparator(sortTarget.indArr(i), sortTarget.indArr(i + 1))) {
+                    let left: number = await sortTarget.indArr(i);
+                    let right: number = await sortTarget.indArr(i + 1);
+                    if (comparator(left, right)) {
                         await sortTarget.swap(i, i + 1);
                         swaps++;
                     }
